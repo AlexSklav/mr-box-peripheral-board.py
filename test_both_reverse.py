@@ -1,0 +1,1 @@
+import sys; print('Python:', sys.version); import dropbot; print('Creating dropbot instance...'); dropbot_instance = dropbot.SerialProxy(); print('dropbot instance created successfully'); import mr_box_peripheral_board as mb; print('Creating mr_box instance...'); mb_instance = mb.SerialProxy(); print('mr_box instance created successfully')

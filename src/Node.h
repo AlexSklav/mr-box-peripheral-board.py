@@ -57,16 +57,17 @@ public:
 
   uint8_t buffer_[BUFFER_SIZE];
 
-  Node() : BaseNode(),
-           BaseNodeConfig<config_t>(mr_box_peripheral_board_Config_fields),
-           PMT(), Pump(),
-           base_node_rpc::ZStage(),
-           Max11210Adc() {
-    // XXX Turn on LED by default to indicate power is on.
+  Node() : 
+    BaseNode(),
+    BaseNodeConfig<config_t>(mr_box_peripheral_board_Config_fields),
+    PMT(), 
+    Pump(),
+    base_node_rpc::ZStage(),
+    Max11210Adc() {
     pinMode(LED_BUILTIN, OUTPUT);
   }
 
-  UInt8Array get_buffer() { return UInt8Array_init(sizeof(buffer_), buffer_); }
+  inline UInt8Array get_buffer() { return UInt8Array_init(sizeof(buffer_), buffer_); }
   /* This is a required method to provide a temporary buffer to the
    * `BaseNode...` classes. */
 
@@ -88,12 +89,13 @@ public:
    * [1]: https://github.com/wheeler-microfluidics/arduino_rpc
    * [2]: https://github.com/wheeler-microfluidics/base_node_rpc
    */
-  UInt8Array hardware_version() {
+  
+  inline UInt8Array hardware_version() {
     return UInt8Array_init(strlen(HARDWARE_VERSION_),
                            (uint8_t *)&HARDWARE_VERSION_[0]);
   }
 
-  bool set_id(UInt8Array id) {
+  inline bool set_id(UInt8Array id) {
     if (id.length > sizeof(config_._.id) - 1) {
       return false;
     }
@@ -105,18 +107,18 @@ public:
   }
 
   // # Callback methods
-  void on_tick() {}
+  inline void on_tick() {}
 
   /** Called periodically from the main program loop. */
-  void loop() {
+  inline void loop() {
     pump_update();
   }
 
   // ##########################################################################
   // # Accessor methods
-  uint16_t analog_input_to_digital_pin(uint16_t pin) { return analogInputToDigitalPin(pin); }
-  uint16_t digital_pin_has_pwm(uint16_t pin) { return digitalPinHasPWM(pin); }
-  uint16_t digital_pin_to_interrupt(uint16_t pin) { return digitalPinToInterrupt(pin); }
+  inline uint16_t analog_input_to_digital_pin(uint16_t pin) { return analogInputToDigitalPin(pin); }
+  inline uint16_t digital_pin_has_pwm(uint16_t pin) { return digitalPinHasPWM(pin); }
+  inline uint16_t digital_pin_to_interrupt(uint16_t pin) { return digitalPinToInterrupt(pin); }
 };
 }  // namespace mr_box_peripheral_board
 

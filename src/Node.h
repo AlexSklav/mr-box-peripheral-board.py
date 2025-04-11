@@ -18,7 +18,7 @@
 #include <pb_validate.h>
 #include <pb_eeprom.h>
 #include <FastDigital.h>
-#include "mr_box_peripheral_board_config_validate.h"
+#include "mr_box_peripheral_board_mrboxconfig_validate.h"
 #include "MrBoxPeripheralBoard/mr_box_config_pb.h"
 #include "PMT.h"
 #include "Pump.h"
@@ -36,8 +36,8 @@ const size_t FRAME_SIZE = (3 * sizeof(uint8_t)  // Frame boundary
 class Node;
 const char HARDWARE_VERSION_[] = "0.1.0";
 
-typedef nanopb::EepromMessage<mr_box_peripheral_board_Config,
-                              config_validate::Validator<Node> > config_t;
+typedef nanopb::EepromMessage<mr_box_peripheral_board_MrBoxConfig,
+                              mrboxconfig_validate::Validator<Node> > config_t;
 
 class Node :
   public BaseNode,
@@ -59,7 +59,7 @@ public:
 
   Node() : 
     BaseNode(),
-    BaseNodeConfig<config_t>(mr_box_peripheral_board_Config_fields),
+    BaseNodeConfig<config_t>(mr_box_peripheral_board_MrBoxConfig_fields),
     PMT(), 
     Pump(),
     base_node_rpc::ZStage(),

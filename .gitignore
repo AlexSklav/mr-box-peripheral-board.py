@@ -19,5 +19,5 @@ lib
 */node.py
 */state.py
 src/NodeCommandProcessor.h
-src/*_config_validate.h
+#src/*_config_validate.h
 src/*_state_validate.h

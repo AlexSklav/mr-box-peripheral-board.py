@@ -18,7 +18,7 @@ private:
   const uint8_t PIN_ENABLE = 2; // PD6 was A3 in mr-box, 6 in original zika
 
   // Consider analog values less than a quarter of full 10-bit range as `LOW`.
-  const uint16_t ANALOG_LOW_THRESHOLD = 1024 / 4;
+  const int ANALOG_LOW_THRESHOLD = 1024 / 4;
 
   /* XXX End-stops are connected to ADC inputs 6 and 7, which are **only**
    * analog inputs and may not be configured as outputs (see [here][1]).  This

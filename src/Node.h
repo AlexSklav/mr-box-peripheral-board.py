@@ -19,7 +19,7 @@
 #include <pb_eeprom.h>
 #include <FastDigital.h>
 #include "mr_box_peripheral_board_config_validate.h"
-#include "MrBoxPeripheralBoard/config_pb.h"
+#include "MrBoxPeripheralBoard/mr_box_config_pb.h"
 #include "PMT.h"
 #include "Pump.h"
 #include "ZStage.h"

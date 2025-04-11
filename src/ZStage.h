@@ -10,10 +10,12 @@ namespace base_node_rpc {
 
 class ZStage {
 private:
-  const int PIN_MICRO_STEPPING = 2;
-  const int PIN_STEP = A2;
-  const int PIN_DIRECTION = A1;
-  const int PIN_ENABLE = A3;
+  const uint8_t PIN_MICRO_STEPPING_1 = 9; // PD2, 2 in original zika= 7,8,9
+  const uint8_t PIN_MICRO_STEPPING_2 = 8;
+  const uint8_t PIN_MICRO_STEPPING_3 = 7;
+  const uint8_t PIN_STEP = 6; // PD7 was A2 in mr-box, 7 in original zika
+  const uint8_t PIN_DIRECTION = 5; // PB0 was A1 in mr-box, 8 in original zika
+  const uint8_t PIN_ENABLE = 2; // PD6 was A3 in mr-box, 6 in original zika
 
   // Consider analog values less than a quarter of full 10-bit range as `LOW`.
   const uint16_t ANALOG_LOW_THRESHOLD = 1024 / 4;
@@ -22,12 +24,12 @@ private:
    * analog inputs and may not be configured as outputs (see [here][1]).  This
    * also means that these pins **DO NOT** have internal pull-up resistors.
    *
-   * TODO Modify MR-Box peripheral board PCB design to incorporate pull-up
+   * TODO Modify Zika-Box peripheral board PCB design to incorporate pull-up
    * resistors for both end stops.
    *
    * [1]: http://forum.arduino.cc/index.php?topic=166232.msg1239671#msg1239671 */
-  const int PIN_END_STOP_1 = 6;  // ADC6
-  const int PIN_END_STOP_2 = 7;  // ADC7
+  const uint8_t PIN_END_STOP_1 = A0;  // ADC6
+  //const int PIN_END_STOP_2 = 7;  // ADC7 //Only one endstop on zika board
 
   class ZStageState {
     public:
@@ -43,7 +45,9 @@ private:
 
 public:
   ZStage() {
-    pinMode(PIN_MICRO_STEPPING, OUTPUT);
+    pinMode(PIN_MICRO_STEPPING_1, OUTPUT);
+    pinMode(PIN_MICRO_STEPPING_2, OUTPUT);
+    pinMode(PIN_MICRO_STEPPING_3, OUTPUT);
     pinMode(PIN_STEP, OUTPUT);
     pinMode(PIN_DIRECTION, OUTPUT);
     pinMode(PIN_ENABLE, OUTPUT);
@@ -168,12 +172,16 @@ public:
 
   void _zstage_enable_micro_stepping() {
     state_.micro_stepping = true;
-    digitalWrite(PIN_MICRO_STEPPING, HIGH);
+    digitalWrite(PIN_MICRO_STEPPING_1, HIGH);
+    digitalWrite(PIN_MICRO_STEPPING_2, HIGH);
+    digitalWrite(PIN_MICRO_STEPPING_3, HIGH);
   }
 
   void _zstage_disable_micro_stepping() {
     state_.micro_stepping = false;
-    digitalWrite(PIN_MICRO_STEPPING, LOW);
+    digitalWrite(PIN_MICRO_STEPPING_1, LOW);
+    digitalWrite(PIN_MICRO_STEPPING_2, LOW);
+    digitalWrite(PIN_MICRO_STEPPING_3, LOW);
   }
 
   /*************************************************************
@@ -195,12 +203,12 @@ public:
                                         ANALOG_LOW_THRESHOLD);
   }
 
-  bool _zstage_engaged() {
+  /*bool _zstage_engaged() {
     // TODO: if state_.engaged_stop_enabled == false, check if the position
     // matches the config_._.zstage_up_position
     return state_.engaged_stop_enabled && (analogRead(PIN_END_STOP_2) <
                                            ANALOG_LOW_THRESHOLD);
-  }
+  }*/
 };
 
 }  // namespace base_node_rpc {

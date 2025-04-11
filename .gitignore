@@ -16,8 +16,9 @@ paver-minilib.zip
 
 lib
 */config.py
+*/mr_box_config.py
 */node.py
 */state.py
 src/NodeCommandProcessor.h
-#src/*_config_validate.h
+src/*_mrboxconfig_validate.h
 src/*_state_validate.h

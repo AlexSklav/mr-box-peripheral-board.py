@@ -58,9 +58,10 @@ def get_properties(**kwargs) -> Dict:
                    base_classes=['BaseNodeSerialHandler',
                                  'BaseNodeEeprom',
                                  'BaseNodeConfig<ConfigMessage, Address>'],
-                   rpc_classes=[f'{module_name}::PMT',
-                                f'{module_name}::Pump',
-                                f'{module_name}::Max11210Adc',
+                   rpc_classes=[
+                                # f'{module_name}::PMT',
+                                # f'{module_name}::Pump',
+                                # f'{module_name}::Max11210Adc',
                                 f'{module_name}::Node',
                                 f'base_node_rpc::ZStage',
                                 ],

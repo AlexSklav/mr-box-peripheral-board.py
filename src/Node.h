@@ -20,10 +20,10 @@
 #include <FastDigital.h>
 #include "mr_box_peripheral_board_mrboxconfig_validate.h"
 #include "MrBoxPeripheralBoard/mr_box_config_pb.h"
-#include "PMT.h"
-#include "Pump.h"
+//#include "PMT.h"
+//#include "Pump.h"
 #include "ZStage.h"
-#include "Max11210Adc.h"
+//#include "Max11210Adc.h"
 
 namespace mr_box_peripheral_board {
 
@@ -46,10 +46,11 @@ class Node :
 #ifndef DISABLE_SERIAL
   public BaseNodeSerialHandler,
 #endif  // #ifndef DISABLE_SERIAL
-  public PMT,
-  public Pump,
-  public base_node_rpc::ZStage,
-  public Max11210Adc {
+//  public PMT,
+//  public Pump,
+  public base_node_rpc::ZStage
+//  public Max11210Adc
+{
 public:
   typedef PacketParser<FixedPacket> parser_t;
 
@@ -60,11 +61,15 @@ public:
   Node() : 
     BaseNode(),
     BaseNodeConfig<config_t>(mr_box_peripheral_board_MrBoxConfig_fields),
-    PMT(), 
-    Pump(),
-    base_node_rpc::ZStage(),
-    Max11210Adc() {
+//    PMT(),
+//    Pump(),
+    base_node_rpc::ZStage(){
+//    Max11210Adc()
     pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(4, OUTPUT); // Mosfet 1
+    digitalWrite(4, LOW);
+    pinMode(10, OUTPUT); // Mosfet 2
+    digitalWrite(10, LOW);
   }
 
   inline UInt8Array get_buffer() { return UInt8Array_init(sizeof(buffer_), buffer_); }
@@ -111,7 +116,7 @@ public:
 
   /** Called periodically from the main program loop. */
   inline void loop() {
-    pump_update();
+//    pump_update();
   }
 
   // ##########################################################################

@@ -30,7 +30,7 @@ try:
                        SerialProxy as _SerialProxy)
     # XXX The `config` module containing the `Config` class definition is
     # generated from the Protocol Buffer file `src/mr_box_config.proto`.
-    from .mr_box_config import Config
+    from .mr_box_config import MrBoxConfig as Config
 
 
     class ConfigMixin(ConfigMixinBase):

@@ -14,7 +14,7 @@ try:
 except (ImportError, TypeError) as exception:
     warnings.warn(str(exception))
 try:
-    from .config import Config
+    from .mr_box_config import MrBoxConfig
 except (ImportError, TypeError) as exception:
     warnings.warn(str(exception))
 

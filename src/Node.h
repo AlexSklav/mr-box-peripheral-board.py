@@ -5,25 +5,33 @@
 #include <string.h>
 #include <stdint.h>
 #include <Arduino.h>
+
+// Dropbot libraries
 #include <NadaMQ.h>
 #include <CArrayDefs.h>
+#include <FastDigital.h>
+#include <pb_cpp_api.h>
+#include <pb_validate.h>
+#include <pb_eeprom.h>
+
+// Properties libraries
 #include "RPCBuffer.h"  // Define packet sizes
 #include "MrBoxPeripheralBoard/Properties.h"  // Define package name, URL, etc.
+
+// BaseNodeRpc libraries
 #include <BaseNodeRpc/BaseNode.h>
 #include <BaseNodeRpc/BaseNodeEeprom.h>
 #include <BaseNodeRpc/BaseNodeConfig.h>
 #include <BaseNodeRpc/BaseNodeSerialHandler.h>
 #include <BaseNodeRpc/SerialHandler.h>
-#include <pb_cpp_api.h>
-#include <pb_validate.h>
-#include <pb_eeprom.h>
-#include <FastDigital.h>
-#include "mr_box_peripheral_board_config_validate.h"
-#include "MrBoxPeripheralBoard/config_pb.h"
-#include "PMT.h"
-#include "Pump.h"
+
+// Local libraries
+#include "mr_box_peripheral_board_mrboxconfig_validate.h"
+#include "MrBoxPeripheralBoard/mr_box_config_pb.h"
+//#include "PMT.h"
+//#include "Pump.h"
 #include "ZStage.h"
-#include "Max11210Adc.h"
+//#include "Max11210Adc.h"
 
 namespace mr_box_peripheral_board {
 
@@ -36,8 +44,8 @@ const size_t FRAME_SIZE = (3 * sizeof(uint8_t)  // Frame boundary
 class Node;
 const char HARDWARE_VERSION_[] = "0.1.0";
 
-typedef nanopb::EepromMessage<mr_box_peripheral_board_Config,
-                              config_validate::Validator<Node> > config_t;
+typedef nanopb::EepromMessage<mr_box_peripheral_board_MrBoxConfig,
+                              mrboxconfig_validate::Validator<Node> > config_t;
 
 class Node :
   public BaseNode,
@@ -46,10 +54,11 @@ class Node :
 #ifndef DISABLE_SERIAL
   public BaseNodeSerialHandler,
 #endif  // #ifndef DISABLE_SERIAL
-  public PMT,
-  public Pump,
-  public base_node_rpc::ZStage,
-  public Max11210Adc {
+//  public PMT,
+//  public Pump,
+  public base_node_rpc::ZStage
+//  public Max11210Adc
+{
 public:
   typedef PacketParser<FixedPacket> parser_t;
 
@@ -57,16 +66,21 @@ public:
 
   uint8_t buffer_[BUFFER_SIZE];
 
-  Node() : BaseNode(),
-           BaseNodeConfig<config_t>(mr_box_peripheral_board_Config_fields),
-           PMT(), Pump(),
-           base_node_rpc::ZStage(),
-           Max11210Adc() {
-    // XXX Turn on LED by default to indicate power is on.
+  Node() : 
+    BaseNode(),
+    BaseNodeConfig<config_t>(mr_box_peripheral_board_MrBoxConfig_fields),
+//    PMT(),
+//    Pump(),
+    base_node_rpc::ZStage(){
+//    Max11210Adc()
     pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(4, OUTPUT); // Mosfet 1
+    digitalWrite(4, LOW);
+    pinMode(10, OUTPUT); // Mosfet 2
+    digitalWrite(10, LOW);
   }
 
-  UInt8Array get_buffer() { return UInt8Array_init(sizeof(buffer_), buffer_); }
+  inline UInt8Array get_buffer() { return UInt8Array_init(sizeof(buffer_), buffer_); }
   /* This is a required method to provide a temporary buffer to the
    * `BaseNode...` classes. */
 
@@ -88,12 +102,13 @@ public:
    * [1]: https://github.com/wheeler-microfluidics/arduino_rpc
    * [2]: https://github.com/wheeler-microfluidics/base_node_rpc
    */
-  UInt8Array hardware_version() {
+  
+  inline UInt8Array hardware_version() {
     return UInt8Array_init(strlen(HARDWARE_VERSION_),
                            (uint8_t *)&HARDWARE_VERSION_[0]);
   }
 
-  bool set_id(UInt8Array id) {
+  inline bool set_id(UInt8Array id) {
     if (id.length > sizeof(config_._.id) - 1) {
       return false;
     }
@@ -105,18 +120,18 @@ public:
   }
 
   // # Callback methods
-  void on_tick() {}
+  inline void on_tick() {}
 
   /** Called periodically from the main program loop. */
-  void loop() {
-    pump_update();
+  inline void loop() {
+//    pump_update();
   }
 
   // ##########################################################################
   // # Accessor methods
-  uint16_t analog_input_to_digital_pin(uint16_t pin) { return analogInputToDigitalPin(pin); }
-  uint16_t digital_pin_has_pwm(uint16_t pin) { return digitalPinHasPWM(pin); }
-  uint16_t digital_pin_to_interrupt(uint16_t pin) { return digitalPinToInterrupt(pin); }
+  inline uint16_t analog_input_to_digital_pin(uint16_t pin) { return analogInputToDigitalPin(pin); }
+  inline uint16_t digital_pin_has_pwm(uint16_t pin) { return digitalPinHasPWM(pin); }
+  inline uint16_t digital_pin_to_interrupt(uint16_t pin) { return digitalPinToInterrupt(pin); }
 };
 }  // namespace mr_box_peripheral_board
 

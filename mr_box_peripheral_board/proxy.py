@@ -26,7 +26,7 @@ try:
     from .node import (Proxy as _Proxy, I2cProxy as _I2cProxy,
                        SerialProxy as _SerialProxy)
     # XXX The `config` module containing the `Config` class definition is
-    # generated from the Protocol Buffer file `src/config.proto`.
+    # generated from the Protocol Buffer file `src/mr_box_config.proto`.
     from .mr_box_config import MrBoxConfig as Config
 
 

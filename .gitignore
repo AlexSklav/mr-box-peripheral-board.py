@@ -1,6 +1,5 @@
 RELEASE-VERSION
 dist/
-setup.py
 Config.h
 .sconsign.dblite
 build/
@@ -13,11 +12,12 @@ paver-minilib.zip
 *.pyc
 .pioenvs/
 */notebooks/.ipynb_checkpoints/
-
+.pio/
 lib
 */config.py
+*/mr_box_config.py
 */node.py
 */state.py
 src/NodeCommandProcessor.h
-src/*_config_validate.h
+src/*_mrboxconfig_validate.h
 src/*_state_validate.h

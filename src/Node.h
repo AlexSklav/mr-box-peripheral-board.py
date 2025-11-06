@@ -5,19 +5,27 @@
 #include <string.h>
 #include <stdint.h>
 #include <Arduino.h>
+
+// Dropbot libraries
 #include <NadaMQ.h>
 #include <CArrayDefs.h>
+#include <FastDigital.h>
+#include <pb_cpp_api.h>
+#include <pb_validate.h>
+#include <pb_eeprom.h>
+
+// Properties libraries
 #include "RPCBuffer.h"  // Define packet sizes
 #include "MrBoxPeripheralBoard/Properties.h"  // Define package name, URL, etc.
+
+// BaseNodeRpc libraries
 #include <BaseNodeRpc/BaseNode.h>
 #include <BaseNodeRpc/BaseNodeEeprom.h>
 #include <BaseNodeRpc/BaseNodeConfig.h>
 #include <BaseNodeRpc/BaseNodeSerialHandler.h>
 #include <BaseNodeRpc/SerialHandler.h>
-#include <pb_cpp_api.h>
-#include <pb_validate.h>
-#include <pb_eeprom.h>
-#include <FastDigital.h>
+
+// Local libraries
 #include "mr_box_peripheral_board_mrboxconfig_validate.h"
 #include "MrBoxPeripheralBoard/mr_box_config_pb.h"
 //#include "PMT.h"

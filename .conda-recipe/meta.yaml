@@ -34,6 +34,7 @@ requirements:
     - base-node-dev
     - base-node-rpc
     - base-node-rpc-dev
+    - protobuf <6
     - pip
 
 #     Split into `noarch` C++ header package and platform-specific Python

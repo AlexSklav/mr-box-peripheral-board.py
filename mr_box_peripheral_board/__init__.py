@@ -1,18 +1,10 @@
-from collections import OrderedDict
 import warnings
 
 from path_helpers import path
 
-from ._version import get_versions
-__version__ = get_versions()['version']
-if '+' in __version__:
-    __version__ = __version__.split('+')[0]
-del get_versions
 
-try:
-    from .proxy import Proxy, I2cProxy, SerialProxy
-except (ImportError, TypeError) as exception:
-    warnings.warn(str(exception))
+from .proxy import Proxy, I2cProxy, SerialProxy
+
 try:
     from .mr_box_config import MrBoxConfig
 except (ImportError, TypeError) as exception:

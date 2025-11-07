@@ -32,9 +32,9 @@ requirements:
     - dropbot-headers
     - base-node
     - base-node-dev
-    - base-node-rpc
+    - base-node-rpc >=0.52.9
     - base-node-rpc-dev
-    - protobuf <6
+    - protobuf 5.29.*
     - pip
 
 #     Split into `noarch` C++ header package and platform-specific Python
@@ -49,7 +49,7 @@ outputs:
         - dropbot-headers
         - base-node
         - base-node-dev
-        - base-node-rpc
+        - base-node-rpc >=0.52.9
         - base-node-rpc-dev
         - platformio
   - name: {{ PKG_NAME }}
@@ -63,14 +63,14 @@ outputs:
         - asyncio-helpers
         - base-node
         - base-node-dev
-        - base-node-rpc
+        - base-node-rpc >=0.52.9
         - base-node-rpc-dev
         - conda-helpers
         - logging-helpers
         - nanopb-helpers
         - path-helpers
         - platformio-helpers
-        - protobuf
+        - protobuf 5.29.*
         - serial-device
     test:
       imports:

@@ -320,7 +320,7 @@ try:
                 df_devices = bnr.available_devices(timeout=self.default_timeout,
                                                    baudrate=baudrate,
                                                    settling_time_s=settling_time_s,
-                                                   skip_descriptor=None)
+                                                   skip_manufacturer=None)
                 if not df_devices.shape[0]:
                     raise IOError('No serial devices available for connection')
                 df_boards = df_devices.loc[df_devices.device_name == self.device_name]

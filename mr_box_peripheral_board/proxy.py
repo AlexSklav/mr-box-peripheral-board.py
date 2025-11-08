@@ -360,10 +360,6 @@ try:
         def __exit__(self, exc_type, exc_value, traceback) -> None:
             self.terminate()
 
-        def __del__(self) -> None:
-            self.terminate()
-
-
         def flash_firmware(self) -> None:
             # currently, we're ignoring the hardware version, but eventually,
             # we will want to pass it to upload()

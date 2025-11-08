@@ -3,7 +3,7 @@ import warnings
 from path_helpers import path
 
 
-from .proxy import Proxy, I2cProxy, SerialProxy
+from .proxy import Proxy, I2cProxy, SerialProxy, __version__
 
 try:
     from .mr_box_config import MrBoxConfig

@@ -4,32 +4,15 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include <time.h>
+#include "pins.h"
 
 namespace base_node_rpc {
 
 
 class ZStage {
 private:
-  const uint8_t PIN_MICRO_STEPPING_1 = 9; // PD2, 2 in original zika= 7,8,9
-  const uint8_t PIN_MICRO_STEPPING_2 = 8;
-  const uint8_t PIN_MICRO_STEPPING_3 = 7;
-  const uint8_t PIN_STEP = 6; // PD7 was A2 in mr-box, 7 in original zika
-  const uint8_t PIN_DIRECTION = 5; // PB0 was A1 in mr-box, 8 in original zika
-  const uint8_t PIN_ENABLE = 2; // PD6 was A3 in mr-box, 6 in original zika
-
   // Consider analog values less than a quarter of full 10-bit range as `LOW`.
   const int ANALOG_LOW_THRESHOLD = 1024 / 4;
-
-  /* XXX End-stops are connected to ADC inputs 6 and 7, which are **only**
-   * analog inputs and may not be configured as outputs (see [here][1]).  This
-   * also means that these pins **DO NOT** have internal pull-up resistors.
-   *
-   * TODO Modify Zika-Box peripheral board PCB design to incorporate pull-up
-   * resistors for both end stops.
-   *
-   * [1]: http://forum.arduino.cc/index.php?topic=166232.msg1239671#msg1239671 */
-  const uint8_t PIN_END_STOP_1 = A0;  // ADC6
-  //const int PIN_END_STOP_2 = 7;  // ADC7 //Only one endstop on zika board
 
   class ZStageState {
     public:
@@ -53,6 +36,8 @@ public:
     pinMode(PIN_ENABLE, OUTPUT);
 
     digitalWrite(PIN_DIRECTION, LOW);
+
+    pinMode(PIN_END_STOP_1, INPUT_PULLUP);
 
     _zstage_reset();
   }
@@ -113,7 +98,7 @@ public:
      * float
      *     New position.
      */
-     // check if the motor is enabled when the funciton was called
+     // check if the motor is enabled when the function was called
     bool prev_motor_enabled = _zstage_motor_enabled();
     // enable it before moving if necessary
     if (!_zstage_motor_enabled()) _zstage_enable_motor();
@@ -199,8 +184,7 @@ public:
   bool _zstage_engaged_stop_enabled() const { return state_.engaged_stop_enabled; }
 
   bool _zstage_at_home() {
-    return state_.home_stop_enabled && (analogRead(PIN_END_STOP_1) <
-                                        ANALOG_LOW_THRESHOLD);
+    return state_.home_stop_enabled && digitalRead(PIN_END_STOP_1);
   }
 
   /*bool _zstage_engaged() {

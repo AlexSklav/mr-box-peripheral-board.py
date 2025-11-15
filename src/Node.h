@@ -6,14 +6,6 @@
 #include <stdint.h>
 #include <Arduino.h>
 
-// Dropbot libraries
-#include <NadaMQ.h>
-#include <CArrayDefs.h>
-#include <FastDigital.h>
-#include <pb_cpp_api.h>
-#include <pb_validate.h>
-#include <pb_eeprom.h>
-
 // Properties libraries
 #include "RPCBuffer.h"  // Define packet sizes
 #include "MrBoxPeripheralBoard/Properties.h"  // Define package name, URL, etc.
@@ -25,11 +17,20 @@
 #include <BaseNodeRpc/BaseNodeSerialHandler.h>
 #include <BaseNodeRpc/SerialHandler.h>
 
+// Dropbot libraries
+#include <NadaMQ.h>
+#include <CArrayDefs.h>
+#include <FastDigital.h>
+#include <pb_cpp_api.h>
+#include <pb_validate.h>
+#include <pb_eeprom.h>
+
 // Local libraries
 #include "mr_box_peripheral_board_mrboxconfig_validate.h"
 #include "MrBoxPeripheralBoard/mr_box_config_pb.h"
 //#include "PMT.h"
 //#include "Pump.h"
+#include "Heater.h"
 #include "ZStage.h"
 //#include "Max11210Adc.h"
 
@@ -56,6 +57,7 @@ class Node :
 #endif  // #ifndef DISABLE_SERIAL
 //  public PMT,
 //  public Pump,
+  public Heater,
   public base_node_rpc::ZStage
 //  public Max11210Adc
 {
@@ -71,13 +73,9 @@ public:
     BaseNodeConfig<config_t>(mr_box_peripheral_board_MrBoxConfig_fields),
 //    PMT(),
 //    Pump(),
+    Heater(),
     base_node_rpc::ZStage(){
 //    Max11210Adc()
-    pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(4, OUTPUT); // Mosfet 1
-    digitalWrite(4, LOW);
-    pinMode(10, OUTPUT); // Mosfet 2
-    digitalWrite(10, LOW);
   }
 
   inline UInt8Array get_buffer() { return UInt8Array_init(sizeof(buffer_), buffer_); }

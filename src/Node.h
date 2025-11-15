@@ -27,7 +27,7 @@
 
 // Local libraries
 #include "mr_box_peripheral_board_mrboxconfig_validate.h"
-#include "MrBoxPeripheralBoard/mr_box_config_pb.h"
+#include "MrBoxPeripheralBoard/mrbox_config_pb.h"
 //#include "PMT.h"
 //#include "Pump.h"
 #include "Heater.h"
@@ -45,7 +45,7 @@ const size_t FRAME_SIZE = (3 * sizeof(uint8_t)  // Frame boundary
 class Node;
 const char HARDWARE_VERSION_[] = "0.1.0";
 
-typedef nanopb::EepromMessage<mr_box_peripheral_board_MrBoxConfig,
+typedef nanopb::EepromMessage<mr_box_peripheral_board_MrboxConfig,
                               mrboxconfig_validate::Validator<Node> > config_t;
 
 class Node :
@@ -70,7 +70,7 @@ public:
 
   Node() : 
     BaseNode(),
-    BaseNodeConfig<config_t>(mr_box_peripheral_board_MrBoxConfig_fields),
+    BaseNodeConfig<config_t>(mr_box_peripheral_board_MrboxConfig_fields),
 //    PMT(),
 //    Pump(),
     Heater(),
@@ -78,7 +78,7 @@ public:
 //    Max11210Adc()
   }
 
-  inline UInt8Array get_buffer() { return UInt8Array_init(sizeof(buffer_), buffer_); }
+  UInt8Array get_buffer() { return UInt8Array_init(sizeof(buffer_), buffer_); }
   /* This is a required method to provide a temporary buffer to the
    * `BaseNode...` classes. */
 
@@ -100,13 +100,12 @@ public:
    * [1]: https://github.com/wheeler-microfluidics/arduino_rpc
    * [2]: https://github.com/wheeler-microfluidics/base_node_rpc
    */
-  
-  inline UInt8Array hardware_version() {
+  UInt8Array hardware_version() {
     return UInt8Array_init(strlen(HARDWARE_VERSION_),
                            (uint8_t *)&HARDWARE_VERSION_[0]);
   }
 
-  inline bool set_id(UInt8Array id) {
+  bool set_id(UInt8Array id) {
     if (id.length > sizeof(config_._.id) - 1) {
       return false;
     }
@@ -118,18 +117,18 @@ public:
   }
 
   // # Callback methods
-  inline void on_tick() {}
+  void on_tick() {}
 
   /** Called periodically from the main program loop. */
-  inline void loop() {
+  void loop() {
 //    pump_update();
   }
 
   // ##########################################################################
   // # Accessor methods
-  inline uint16_t analog_input_to_digital_pin(uint16_t pin) { return analogInputToDigitalPin(pin); }
-  inline uint16_t digital_pin_has_pwm(uint16_t pin) { return digitalPinHasPWM(pin); }
-  inline uint16_t digital_pin_to_interrupt(uint16_t pin) { return digitalPinToInterrupt(pin); }
+  uint16_t analog_input_to_digital_pin(uint16_t pin) { return analogInputToDigitalPin(pin); }
+  uint16_t digital_pin_has_pwm(uint16_t pin) { return digitalPinHasPWM(pin); }
+  uint16_t digital_pin_to_interrupt(uint16_t pin) { return digitalPinToInterrupt(pin); }
 };
 }  // namespace mr_box_peripheral_board
 

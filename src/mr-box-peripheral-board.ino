@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "EEPROM.h"
+// #include "EEPROM.h"
 #include "FastDigital.h"
 #include "Memory.h"  // Memory utility functions, e.g., ram_free()
 #include "ArduinoRpc.h"

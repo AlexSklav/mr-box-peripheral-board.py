@@ -30,8 +30,8 @@ try:
     # the C++ file `src/Node.hpp`.
     from .node import (Proxy, I2cProxy as _I2cProxy)
     # XXX The `config` module containing the `Config` class definition is
-    # generated from the Protocol Buffer file `src/mr_box_config.proto`.
-    from .mr_box_config import MrBoxConfig as Config
+    # generated from the Protocol Buffer file `src/mrbox_config.proto`.
+    from .mrbox_config import MrboxConfig as Config
 
 
     class ConfigMixin(ConfigMixinBase):

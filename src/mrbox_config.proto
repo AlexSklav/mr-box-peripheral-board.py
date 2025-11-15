@@ -1,7 +1,7 @@
 syntax="proto2";
 package mr_box_peripheral_board;
 
-message MrBoxConfig {
+message MrboxConfig {
   /* # Configuration structure #
    *
    * This structure contains fields that can easily be updated through the
@@ -15,16 +15,15 @@ message MrBoxConfig {
   // optional uint32 serial_number = 1; // deprecated
   // optional uint32 baud_rate = 2 [default = 115200]; // deprecated
   // optional uint32 i2c_address = 3;
-
   /* Start new fields below.
    * For example:
    *
    *      optional float my_float_field = 50;
    *      optional int32 my_int_field = 51;
    */
-  optional float zstage_down_position = 50 [default = 0.5];
-  optional float zstage_up_position   = 51 [default = 20];
-  optional string id = 52 [default = ''];  // Human readable hardware identifier
+  optional string id = 50 [default = ''];  // Human readable hardware identifier
+  optional float zstage_down_position = 51 [default = 0.5];
+  optional float zstage_up_position   = 52 [default = 10.1];
 //  optional uint32 pmt_control_voltage = 52 [default = 900];
 //  optional uint32 pmt_sampling_rate = 53 [default = 1];
   /* ADC default calibration values

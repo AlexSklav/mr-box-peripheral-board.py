@@ -6,7 +6,7 @@ from path_helpers import path
 from .proxy import Proxy, I2cProxy, SerialProxy, __version__
 
 try:
-    from .mr_box_config import MrBoxConfig
+    from .mrbox_config import MrboxConfig as Config
 except (ImportError, TypeError) as exception:
     warnings.warn(str(exception))
 

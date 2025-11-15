@@ -21,3 +21,5 @@ lib
 src/NodeCommandProcessor.h
 src/*_mrboxconfig_validate.h
 src/*_state_validate.h
+src/mr_box_peripheral_board_config_validate.h
+mr_box_peripheral_board/mrbox_config.py

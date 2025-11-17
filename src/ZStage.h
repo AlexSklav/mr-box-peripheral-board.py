@@ -184,7 +184,7 @@ public:
   bool _zstage_engaged_stop_enabled() const { return state_.engaged_stop_enabled; }
 
   bool _zstage_at_home() {
-    return state_.home_stop_enabled && digitalRead(PIN_END_STOP_1);
+    return state_.home_stop_enabled && !digitalRead(PIN_END_STOP_1);
   }
 
   /*bool _zstage_engaged() {

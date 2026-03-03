@@ -45,7 +45,7 @@ def _generate_data(stop_event, data_ready, data):
         time_0 = dt.datetime.now()
         values_i = np.random.rand(samples_per_plot)
         absolute_times_i = pd.Series([time_0 + i * delta_t
-                                      for i in xrange(len(values_i))])
+                                      for i in range(len(values_i))])
         data_i = pd.Series(values_i, index=absolute_times_i)
         data.append(data_i)
         data_ready.set()

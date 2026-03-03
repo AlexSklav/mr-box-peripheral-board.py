@@ -73,7 +73,7 @@ def format_CTRL3(CTRL3):
          nosco = "Disabled\n";
      else:
          nosco = "Enabled\n";
-     return ("Digital Gain: "+dgain+"System Gain: "+nosysg+"System Offset: "+nosyso+"Self-calibration Gain: "+noscg+"Self-calibration Offset: "+nosco)
+     return f"Digital Gain: {dgain}System Gain: {nosysg}System Offset: {nosyso}Self-calibration Gain: {noscg}Self-calibration Offset: {nosco}"
 
 
 def format_CTRL1(CTRL1):
@@ -106,7 +106,7 @@ def format_CTRL1(CTRL1):
         scycle = "Single\n";
     else:
         scycle = "Continuous\n";
-    return ("Line frequency: "+lfreq +"Input Range: "+inprange+"Clock: "+clk+"Refference Buffer: "+rbuf+"Signal Buffer: "+sbuf+"Format: "+format+"Cycle: "+scycle)
+    return f"Line frequency: {lfreq}Input Range: {inprange}Clock: {clk}Refference Buffer: {rbuf}Signal Buffer: {sbuf}Format: {format}Cycle: {scycle}"
 
 
 def format_STAT1(STAT1):
@@ -152,7 +152,7 @@ def format_STAT1(STAT1):
         rdy = "Ready\n"
     else:
         rdy = "In Progress\n"
-    return ("Gain Over Range: "+gor+"Sampling Rate: "+rate+"Input Signal Over Max: "+mor+"Input Signal Under Min: "+ur+"Modulator Status: "+mstat+"ADC Status: "+rdy)
+    return f"Gain Over Range: {gor}Sampling Rate: {rate}Input Signal Over Max: {mor}Input Signal Under Min: {ur}Modulator Status: {mstat}ADC Status: {rdy}"
 
 def MAX11210_begin(proxy):
     LINE_FREQ = 60 # 60 Hz
@@ -203,7 +203,7 @@ def MAX11210_read(proxy, rate,  duration_s):
 
 def MAX11210_status(proxy):
     logger = logging.getLogger(__name__)
-    logger.info('Status Register\n%s' % format_STAT1(proxy.MAX11210_getSTAT1()))
-    logger.info('Control Register 1\n%s' % format_CTRL1(proxy.MAX11210_getCTRL1()))
-    # logger.info('Control Register 1\n%s' % str(format(proxy.MAX11210_getCTRL2(),'b'))
-    logger.info('Control Register 3\n%s' % format_CTRL3(proxy.MAX11210_getCTRL3()))
+    logger.info('Status Register\n%s', format_STAT1(proxy.MAX11210_getSTAT1()))
+    logger.info('Control Register 1\n%s', format_CTRL1(proxy.MAX11210_getCTRL1()))
+    # logger.info('Control Register 1\n%s', str(format(proxy.MAX11210_getCTRL2(),'b'))
+    logger.info('Control Register 3\n%s', format_CTRL3(proxy.MAX11210_getCTRL3()))

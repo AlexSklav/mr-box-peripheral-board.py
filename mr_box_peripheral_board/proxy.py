@@ -254,7 +254,7 @@ try:
             return self.set_id(id)
 
         def _hardware_version(self) -> np.array:
-            return super(ProxyMixin, self).hardware_version()
+            return super().hardware_version()
 
         @property
         def hardware_version(self) -> str:
@@ -272,7 +272,7 @@ try:
                 but subsequent restored connection events after connecting to
                 the ``connected`` signal will be received.
             """
-            super(ProxyMixin, self)._connect(*args, **kwargs)
+            super()._connect(*args, **kwargs)
             self.signals.signal('connected').send({'event': 'connected'})
 
     class I2cProxy(ProxyMixin, _I2cProxy):
@@ -329,7 +329,7 @@ try:
                 port = df_boards.index[0]
 
             self.connect(port, baudrate)
-            super(SerialProxy, self).__init__(**kwargs)
+            super().__init__(**kwargs)
 
         @property
         def signals(self):

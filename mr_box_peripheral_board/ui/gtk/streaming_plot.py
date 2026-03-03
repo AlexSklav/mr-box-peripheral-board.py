@@ -16,8 +16,7 @@ import numpy as np
 import pandas as pd
 import si_prefix as si
 
-s_formatter = mpl.ticker.FuncFormatter(lambda x, *args: '%ss' %
-                                       si.si_format(x))
+s_formatter = mpl.ticker.FuncFormatter(lambda x, *args: f'{si.si_format(x)}s')
 
 
 class StreamingPlot(SlaveView):
@@ -49,7 +48,7 @@ class StreamingPlot(SlaveView):
         self.line = None
         self.axis = None
         self.data_func = data_func
-        super(StreamingPlot, self).__init__()
+        super().__init__()
 
     def create_ui(self):
         def _destroy(*args):
@@ -98,7 +97,7 @@ class StreamingPlot(SlaveView):
 
     def reset(self):
         self.line = None
-        for i in xrange(len(self.data)):
+        for i in range(len(self.data)):
             self.data.pop()
 
         if self.axis is None:
@@ -141,8 +140,7 @@ class StreamingPlot(SlaveView):
                     if self.si_units:
                         # Use SI prefix corresponding to each axis tick value
                         # for units.
-                        yformat_func = (lambda x, *args: '%s%s' %
-                                        (si.si_format(x, 2), unit))
+                        yformat_func = (lambda x, *args: f'{si.si_format(x, 2)}{unit}')
                         y_formatter = mpl.ticker.FuncFormatter(yformat_func)
                         self.axis.yaxis.set_major_formatter(y_formatter)
                     else:

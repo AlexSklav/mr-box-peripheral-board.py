@@ -13,13 +13,13 @@ class PumpControl(SlaveView):
         self.proxy = proxy
         self.duration_s = duration_s
         self.frequency_hz = frequency_hz
-        super(PumpControl, self).__init__()
+        super().__init__()
 
     def create_ui(self):
         def _pump_frequency(adj):
             try:
                 self.proxy.pump_frequency_set(adj.value)
-            except:
+            except Exception:
                 logger.debug('[_pump_frequency] Error setting pump frequency'
                              ' to %s.', adj.value)
 

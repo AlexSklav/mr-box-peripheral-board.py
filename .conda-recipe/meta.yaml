@@ -24,6 +24,7 @@ build:
 requirements:
   build:
     - python {{ python }}
+    - setuptools
     - path-helpers
     - conda-helpers
     - platformio-helpers

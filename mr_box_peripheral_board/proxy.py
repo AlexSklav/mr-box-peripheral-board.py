@@ -194,6 +194,8 @@ try:
                     self._parent._zstage_move_to(
                         self._parent.config['zstage_up_position'])
                     time.sleep(1)
+                self._parent.signals.signal('magnet').send(
+                    {'event': 'magnet', 'position': 'up'})
 
             @property
             def is_down(self):
@@ -204,9 +206,13 @@ try:
                 if not self.is_down:
                     self._parent._zstage_move_to(
                         self._parent.config['zstage_down_position'])
+                self._parent.signals.signal('magnet').send(
+                    {'event': 'magnet', 'position': 'down'})
 
             def home(self):
                 self._parent._zstage_home()
+                self._parent.signals.signal('magnet').send(
+                    {'event': 'magnet', 'position': 'home'})
 
             @property
             def engaged_stop_enabled(self):

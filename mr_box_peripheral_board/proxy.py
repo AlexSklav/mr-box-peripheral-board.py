@@ -133,6 +133,11 @@ try:
         class ZStage(object):
             def __init__(self, parent):
                 self._parent = parent
+                self._moving = False
+
+            @property
+            def moving(self):
+                return self._moving
 
             @property
             def position(self):
@@ -189,30 +194,50 @@ try:
                 return (self.state['position'] ==
                         self._parent.config['zstage_up_position'])
 
-            def up(self):
+            def up(self, blocking=True):
+                if blocking:
+                    self._do_up()
+                else:
+                    threading.Thread(target=self._do_up, daemon=True).start()
+
+            def _do_up(self):
+                self._moving = True
                 if not self.is_up:
                     self._parent._zstage_move_to(
                         self._parent.config['zstage_up_position'])
-                    time.sleep(1)
-                self._parent.signals.signal('magnet').send(
-                    {'event': 'magnet', 'position': 'up'})
+                self._moving = False
+                self._send_signals('up')
 
             @property
             def is_down(self):
                 return (self.state['position'] ==
                         self._parent.config['zstage_down_position'])
 
-            def down(self):
+            def down(self, blocking=True):
+                if blocking:
+                    self._do_down()
+                else:
+                    threading.Thread(target=self._do_down, daemon=True).start()
+
+            def _do_down(self):
+                self._moving = True
                 if not self.is_down:
                     self._parent._zstage_move_to(
                         self._parent.config['zstage_down_position'])
-                self._parent.signals.signal('magnet').send(
-                    {'event': 'magnet', 'position': 'down'})
+                self._moving = False
+                self._send_signals('down')
 
-            def home(self):
+            def home(self, blocking=True):
+                if blocking:
+                    self._do_home()
+                else:
+                    threading.Thread(target=self._do_home, daemon=True).start()
+
+            def _do_home(self):
+                self._moving = True
                 self._parent._zstage_home()
-                self._parent.signals.signal('magnet').send(
-                    {'event': 'magnet', 'position': 'home'})
+                self._moving = False
+                self._send_signals('home')
 
             @property
             def engaged_stop_enabled(self):
@@ -245,9 +270,24 @@ try:
                         getattr(self._parent,
                                 '_zstage_set_{0}'.format(key_i))(value_i)
 
-            def move_to(self, position):
-                self._parent._zstage_move_to(position)
+            def move_to(self, position, blocking=True):
+                if blocking:
+                    self._do_move_to(position)
+                else:
+                    threading.Thread(target=self._do_move_to,
+                                    args=(position,), daemon=True).start()
 
+            def _do_move_to(self, position):
+                self._moving = True
+                self._parent._zstage_move_to(position)
+                self._moving = False
+                self._send_signals('move_to')
+
+            def _send_signals(self, label):
+                """Send magnet and position signals after a move completes."""
+                pos = self._parent._zstage_position()
+                self._parent.signals.signal('magnet').send(
+                    {'event': 'magnet', 'location': label, 'abs_position': pos})
         def close(self):
             self.terminate()
 

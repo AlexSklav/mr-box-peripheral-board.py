@@ -1,3 +1,4 @@
+import contextlib
 import time
 import threading
 
@@ -131,9 +132,41 @@ try:
                 self._parent.analog_write(self._pin, brightness * 255.0)
 
         class ZStage(object):
+            # Serial timeout (in seconds) used for blocking z-stage motion
+            # commands (i.e., `home` and `move_to`).
+            #
+            # XXX The firmware implementations of `_zstage_home()` and
+            # `_zstage_move_to()` block until the motion completes, which may
+            # take up to ~10 seconds (the firmware caps homing at 10 s).  If
+            # the serial timeout is shorter than the firmware call, the
+            # `base_node_rpc` serial monitor silently **re-sends** the command;
+            # the response to the duplicate request later desynchronizes the
+            # shared (uncorrelated) response queue, causing a *subsequent*
+            # command to pop an empty/stale response.
+            MOTION_TIMEOUT_S = 15
+
             def __init__(self, parent):
                 self._parent = parent
                 self._moving = False
+
+            @contextlib.contextmanager
+            def _long_timeout(self, timeout_s):
+                """
+                Temporarily override the parent proxy serial timeout.
+
+                **Note** The `default_timeout` attribute is shared instance
+                state and non-blocking moves run in daemon threads, so hold
+                the parent transaction lock for the duration of the override
+                to prevent concurrent commands from observing (or clobbering)
+                the temporary value.
+                """
+                with self._parent.transaction_lock:
+                    original_timeout = self._parent.default_timeout
+                    self._parent.default_timeout = timeout_s
+                    try:
+                        yield
+                    finally:
+                        self._parent.default_timeout = original_timeout
 
             @property
             def moving(self):
@@ -203,8 +236,9 @@ try:
             def _do_up(self):
                 self._moving = True
                 if not self.is_up:
-                    self._parent._zstage_move_to(
-                        self._parent.config['zstage_up_position'])
+                    with self._long_timeout(self.MOTION_TIMEOUT_S):
+                        self._parent._zstage_move_to(
+                            self._parent.config['zstage_up_position'])
                 self._moving = False
                 self._send_signals('up')
 
@@ -222,8 +256,9 @@ try:
             def _do_down(self):
                 self._moving = True
                 if not self.is_down:
-                    self._parent._zstage_move_to(
-                        self._parent.config['zstage_down_position'])
+                    with self._long_timeout(self.MOTION_TIMEOUT_S):
+                        self._parent._zstage_move_to(
+                            self._parent.config['zstage_down_position'])
                 self._moving = False
                 self._send_signals('down')
 
@@ -235,7 +270,8 @@ try:
 
             def _do_home(self):
                 self._moving = True
-                self._parent._zstage_home()
+                with self._long_timeout(self.MOTION_TIMEOUT_S):
+                    self._parent._zstage_home()
                 self._moving = False
                 self._send_signals('home')
 
@@ -279,7 +315,8 @@ try:
 
             def _do_move_to(self, position):
                 self._moving = True
-                self._parent._zstage_move_to(position)
+                with self._long_timeout(self.MOTION_TIMEOUT_S):
+                    self._parent._zstage_move_to(position)
                 self._moving = False
                 self._send_signals('move_to')
 

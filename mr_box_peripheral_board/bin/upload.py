@@ -42,7 +42,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--hardware-version', default=environments[-1],
                         choices=environments)
     args = parser.parse_args()
-    extra_args = [] if args.port is None else ['--port', args.port]
+    extra_args = [] if args.port is None else ['--upload-port', args.port]
 
     upload_conda('mr-box-peripheral-board',
                  env_name=args.hardware_version, extra_args=extra_args)

@@ -89,8 +89,12 @@ def compile_protobufs(**kwargs) -> None:
     import nanopb_helpers as pbh
 
     package_name = kwargs.get('package_name')
+    module_name = kwargs.get('module_name') or package_name.replace('-', '_')
     source_path = path(kwargs.get('source_dir')).joinpath(package_name, 'metadata.proto')
-    code = pbh.compile_pb(source_path)
+    # Scope the descriptor per package: every firmware package has a
+    # `metadata.proto`, and unscoped names collide in the shared protobuf
+    # descriptor pool when two packages are imported in one process.
+    code = pbh.compile_pb(source_path, scope=module_name)
     output_path = source_path.with_suffix('.py')
     print(f'Generated {source_path} > {output_path}')
     output_path.write_text(code['python'])

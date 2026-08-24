@@ -28,12 +28,12 @@ requirements:
     - path-helpers
     - conda-helpers
     - platformio-helpers
-    - nanopb-helpers
-    - platformio
+    - nanopb-helpers >=0.12.7
+    - platformio >=6.1.16
     - dropbot-headers
     - base-node
     - base-node-dev
-    - base-node-rpc >=0.52.9
+    - base-node-rpc >=0.52.12
     - base-node-rpc-dev
     - protobuf 5.29.*
     - pip
@@ -50,9 +50,9 @@ outputs:
         - dropbot-headers
         - base-node
         - base-node-dev
-        - base-node-rpc >=0.52.9
+        - base-node-rpc >=0.52.12
         - base-node-rpc-dev
-        - platformio
+        - platformio >=6.1.16
   - name: {{ PKG_NAME }}
     noarch: python
     files:
